@@ -1,10 +1,10 @@
-# DullSopper 😴🛍️
+# DullShopper 😴🛍️
 
 > **Tame your shopping impulses by turning web shops into dull, unappealing grayscale.**
 
-**DullSopper** is a lightweight Firefox extension (Manifest V3) that automatically detects online shops and e-commerce stores, instantly stripping away their vibrant, dopamine-inducing colors and rendering them in flat, drab grayscale.
+**DullShopper** is a lightweight Firefox extension (Manifest V3) that automatically detects online shops and e-commerce stores, instantly stripping away their vibrant, dopamine-inducing colors and rendering them in flat, drab grayscale.
 
-Research in consumer psychology shows that vibrant colors and polished product photography stimulate emotional impulses and urgency. DullSopper neutralizes this effect, helping you slow down, think rationally, and curb impulse spending.
+Research in consumer psychology shows that vibrant colors and polished product photography stimulate emotional impulses and urgency. DullShopper neutralizes this effect, helping you slow down, think rationally, and curb impulse spending.
 
 ---
 
@@ -14,13 +14,16 @@ Research in consumer psychology shows that vibrant colors and polished product p
   - **Schema.org Structured Data**: Recognizes `Product`, `Offer`, `AggregateOffer`, `Store`, and `ShoppingCart` microdata and JSON-LD.
   - **Platform Signatures**: Identifies Shopify, WooCommerce, Magento, BigCommerce, PrestaShop, Squarespace Commerce, etc.
   - **Interactive Buy Triggers**: Detects multilingual "Add to Cart", "Buy Now", and "Proceed to Checkout" actions (English, German, French, Spanish, Finnish, Swedish, Dutch, etc.).
-  - **Preloaded Major Retailers**: Instant zero-delay grayscale for global platforms (Amazon, eBay, AliExpress, Walmart, Target, Etsy, Shein, Temu, ASOS, Zara, etc.).
+  - **Preloaded Major Retailers**: Instant zero-delay grayscale for global platforms (Amazon, eBay, AliExpress, Walmart, Target, Etsy, Shein, Temu, ASOS, Zara, Verkkokauppa, etc.).
 - 🌐 **Community Shopping Blocklist Integration**:
   - Automatically loads and integrates [StbanMc/CommunityBlocklists (shopping.txt)](https://raw.githubusercontent.com/StbanMc/CommunityBlocklists/main/exports/hosts/shopping.txt).
   - Covers **188,000+** web stores and e-commerce platforms out of the box.
   - **Automatic Background Updates**: Periodically syncs every 24 hours via `browser.alarms` to ensure newly registered shops are covered.
   - Includes a preloaded local snapshot so protection works immediately offline.
   - Manual "Update List Now" button and interactive domain lookup tester in Options.
+- 🛡️ **Anti-Tamper & SPA Hydration Resilience** (e.g. Verkkokauppa.com, Next.js, React):
+  - Prevents single-page applications and client-side hydration from stripping the grayscale filter.
+  - Uses continuous `MutationObserver` enforcement, persistent top-specificity style injection, `data-dullshopper` attribute locking, and HTML5 `pushState`/`replaceState` route tracking.
 - 🩶 **Clean, Fast Grayscale Filtering**:
   - Injected via high-performance CSS filter variables with zero layout disruption.
   - Zero-flash startup: known shops and blocked domains are dulled immediately before DOM rendering completes.
@@ -46,22 +49,22 @@ Research in consumer psychology shows that vibrant colors and polished product p
 ### Option A: Load Temporarily in Firefox (Quickest)
 1. Open Firefox and navigate to `about:debugging#/runtime/this-firefox`.
 2. Click **"Load Temporary Add-on..."**.
-3. Select the `manifest.json` file inside the `DullSopper` directory (or the `.zip` in `web-ext-artifacts/`).
-4. The DullSopper icon will appear in your Firefox toolbar!
+3. Select the `manifest.json` file inside the extension directory (or the `.zip` in `web-ext-artifacts/`).
+4. The DullShopper icon will appear in your Firefox toolbar!
 
 ### Option B: Run via `web-ext`
 ```bash
 npm start
 ```
-This automatically launches a clean Firefox profile with DullSopper preloaded.
+This automatically launches a clean Firefox profile with DullShopper preloaded.
 
 ---
 
 ## 🛠️ Usage
 
 ### Extension Popup
-Click the DullSopper icon in the toolbar on any webpage:
-- **Site Status**: Shows whether the site is **Dulled (Shop Detected)**, **Dulled (Blocklist)**, **Allowed (Whitelisted)**, or **Normal**.
+Click the DullShopper icon in the toolbar on any webpage:
+- **Site Status**: Shows whether the site is **Dulled (Shop Detected)**, **Dulled (Blocklist)**, **Dulled (Community List)**, **Allowed (Whitelisted)**, or **Normal**.
 - **Detection Reasons**: Click to expand and see why a site was classified as a store (e.g., *Shopify platform*, *Schema.org Product*, *Add to Cart button*).
 - **1-Click Action**:
   - If a site is dulled: Click **"Allow on this site (Restore color)"** to whitelist it.
@@ -70,8 +73,9 @@ Click the DullSopper icon in the toolbar on any webpage:
 - **Quick Add**: Type any domain to immediately add it to your Dull List.
 
 ### Options Page
-Right-click the DullSopper toolbar icon and select **Manage Extension** > **Options** (or click **⚙️ Settings & Lists** in the popup):
+Right-click the DullShopper toolbar icon and select **Manage Extension** > **Options** (or click **⚙️ Settings & Lists** in the popup):
 - **Domain Lists**: View, filter, and delete domains in your Dull List (Blocklist) and Allowed List (Whitelist).
+- **Community List**: View status of the 188,000+ domain shopping blocklist, test domain presence, and manually trigger updates.
 - **Detected Shops**: See history of all shops detected during your browsing sessions.
 - **Detection & Filter Settings**: Configure sensitivity, contrast reduction, brightness dimming, and toolbar badges.
 - **Backup & Restore**: Export your customized rules to a JSON file or import existing settings.
@@ -98,16 +102,16 @@ npm run build
 ## 📁 File Structure
 
 ```
-DullSopper/
+DullShopper/
 ├── manifest.json            # Firefox Manifest V3 definition
 ├── package.json             # NPM package scripts & dependencies
 ├── README.md                # Documentation
 ├── background/
-│   └── background.js        # Background worker (tab badges, state sync)
+│   └── background.js        # Background worker (tab badges, state sync, 24h updates)
 ├── content/
 │   ├── detector.js          # Heuristic e-commerce detection engine
-│   ├── content.js           # Content coordinator & style injection
-│   └── dullsopper.css       # Grayscale filter and notification styling
+│   ├── content.js           # Content coordinator & persistent style enforcement
+│   └── dullshopper.css      # Grayscale filter and notification styling
 ├── popup/
 │   ├── popup.html           # Browser toolbar popup interface
 │   ├── popup.css            # Dark mode styling for popup
@@ -118,12 +122,16 @@ DullSopper/
 │   └── options.js           # Settings controller & JSON import/export
 ├── shared/
 │   ├── constants.js         # Shared status enums and message channels
+│   ├── community-list.js    # Community Shopping Blocklist engine (188k+ domains)
 │   ├── popular-shops.js     # Curated database of major online retailers
 │   └── storage.js           # Unified storage and domain evaluation
+├── data/
+│   └── community-shopping.txt # Bundled snapshot of StbanMc shopping blocklist
 ├── icons/                   # Extension icons (16, 32, 48, 128 px)
 └── test/
     ├── test_suite.js        # Unit tests for domain extraction & evaluation
-    └── test_detector_dom.js # DOM fixture tests for detection engine
+    ├── test_detector_dom.js # DOM fixture tests for detection engine
+    └── test_community_list.js # Unit tests for community blocklist parser
 ```
 
 ---

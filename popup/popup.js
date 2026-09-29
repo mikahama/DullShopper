@@ -5,6 +5,14 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const browserApi = (typeof browser !== 'undefined') ? browser : chrome;
 
+  const consts = (typeof DULLSHOPPER_CONSTANTS !== 'undefined')
+    ? DULLSHOPPER_CONSTANTS
+    : (typeof DULLSOPPER_CONSTANTS !== 'undefined' ? DULLSOPPER_CONSTANTS : null);
+
+  const storage = (typeof DullShopperStorage !== 'undefined')
+    ? DullShopperStorage
+    : (typeof DullSopperStorage !== 'undefined' ? DullSopperStorage : null);
+
   // DOM Elements
   const globalToggle = document.getElementById('global-toggle');
   const globalDisabledBanner = document.getElementById('global-disabled-banner');

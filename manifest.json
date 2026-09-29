@@ -1,11 +1,11 @@
 {
   "manifest_version": 3,
-  "name": "DullSopper - Web Shop Grayscale Filter",
+  "name": "DullShopper - Web Shop Grayscale Filter",
   "version": "1.0.0",
   "description": "Detects web shops and turns pages into dull grayscale to curb impulse shopping.",
   "browser_specific_settings": {
     "gecko": {
-      "id": "dullsopper@mikahama.local",
+      "id": "dullshopper@mikahama.local",
       "strict_min_version": "142.0",
       "data_collection_permissions": {
         "required": ["none"]
@@ -40,14 +40,14 @@
         "content/detector.js",
         "content/content.js"
       ],
-      "css": ["content/dullsopper.css"],
+      "css": ["content/dullshopper.css"],
       "run_at": "document_start",
       "all_frames": false
     }
   ],
   "action": {
     "default_popup": "popup/popup.html",
-    "default_title": "DullSopper",
+    "default_title": "DullShopper",
     "default_icon": {
       "16": "icons/icon-16.png",
       "32": "icons/icon-32.png",

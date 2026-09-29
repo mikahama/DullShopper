@@ -1,8 +1,8 @@
 /**
- * DullSopper - Storage & Domain Management Utilities
+ * DullShopper - Storage & Domain Management Utilities
  */
 
-const DullSopperStorage = (() => {
+const DullShopperStorage = (() => {
   // Use browser API (Firefox) or chrome API fallback
   const storageArea = (typeof browser !== 'undefined' && browser.storage && browser.storage.local)
     ? browser.storage.local
@@ -10,33 +10,45 @@ const DullSopperStorage = (() => {
       ? chrome.storage.local
       : null;
 
-  const { STORAGE_KEYS, DEFAULT_SETTINGS, STATUS } = (typeof DULLSOPPER_CONSTANTS !== 'undefined')
-    ? DULLSOPPER_CONSTANTS
-    : {
-        STORAGE_KEYS: {
-          SETTINGS: 'dullsopper_settings',
-          BLOCKLIST: 'dullsopper_blocklist',
-          WHITELIST: 'dullsopper_whitelist',
-          DETECTED_SHOPS: 'dullsopper_detected_shops'
-        },
-        DEFAULT_SETTINGS: {
-          enabled: true,
-          autoDetect: true,
-          grayscaleIntensity: 100,
-          dimImages: false,
-          reduceContrast: false,
-          includePreloadedShops: true,
-          showBadge: true,
-          showBanner: false
-        },
-        STATUS: {
-          DULLED_DETECTED: 'dulled_detected',
-          DULLED_BLOCKED: 'dulled_blocked',
-          DULLED_PRELOADED: 'dulled_preloaded',
-          WHITELISTED: 'whitelisted',
-          NORMAL: 'normal'
-        }
-      };
+  const consts = (typeof DULLSHOPPER_CONSTANTS !== 'undefined')
+    ? DULLSHOPPER_CONSTANTS
+    : (typeof DULLSOPPER_CONSTANTS !== 'undefined' ? DULLSOPPER_CONSTANTS : null);
+
+  const STORAGE_KEYS = (consts && consts.STORAGE_KEYS) || {
+    SETTINGS: 'dullshopper_settings',
+    BLOCKLIST: 'dullshopper_blocklist',
+    WHITELIST: 'dullshopper_whitelist',
+    DETECTED_SHOPS: 'dullshopper_detected_shops'
+  };
+
+  const LEGACY_STORAGE_KEYS = (consts && consts.LEGACY_STORAGE_KEYS) || {
+    SETTINGS: 'dullsopper_settings',
+    BLOCKLIST: 'dullsopper_blocklist',
+    WHITELIST: 'dullsopper_whitelist',
+    DETECTED_SHOPS: 'dullsopper_detected_shops'
+  };
+
+  const DEFAULT_SETTINGS = (consts && consts.DEFAULT_SETTINGS) || {
+    enabled: true,
+    autoDetect: true,
+    grayscaleIntensity: 100,
+    dimImages: false,
+    reduceContrast: false,
+    includePreloadedShops: true,
+    useCommunityBlocklist: true,
+    autoUpdateCommunityList: true,
+    showBadge: true,
+    showBanner: false
+  };
+
+  const STATUS = (consts && consts.STATUS) || {
+    DULLED_DETECTED: 'dulled_detected',
+    DULLED_BLOCKED: 'dulled_blocked',
+    DULLED_PRELOADED: 'dulled_preloaded',
+    DULLED_COMMUNITY: 'dulled_community',
+    WHITELISTED: 'whitelisted',
+    NORMAL: 'normal'
+  };
 
   /**
    * Safe promise wrapper for storage.get
@@ -360,9 +372,12 @@ const DullSopperStorage = (() => {
   };
 })();
 
+const DullSopperStorage = DullShopperStorage;
+
 if (typeof globalThis !== 'undefined') {
-  globalThis.DullSopperStorage = DullSopperStorage;
+  globalThis.DullShopperStorage = DullShopperStorage;
+  globalThis.DullSopperStorage = DullShopperStorage;
 }
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = DullSopperStorage;
+  module.exports = DullShopperStorage;
 }

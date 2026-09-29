@@ -4,20 +4,24 @@
  * https://raw.githubusercontent.com/StbanMc/CommunityBlocklists/main/exports/hosts/shopping.txt
  */
 
-const DullSopperCommunityList = (() => {
+const DullShopperCommunityList = (() => {
   const browserApi = (typeof browser !== 'undefined') ? browser : (typeof chrome !== 'undefined' ? chrome : null);
 
-  const LIST_URL = (typeof DULLSOPPER_CONSTANTS !== 'undefined' && DULLSOPPER_CONSTANTS.COMMUNITY_LIST_URL)
-    ? DULLSOPPER_CONSTANTS.COMMUNITY_LIST_URL
+  const consts = (typeof DULLSHOPPER_CONSTANTS !== 'undefined')
+    ? DULLSHOPPER_CONSTANTS
+    : (typeof DULLSOPPER_CONSTANTS !== 'undefined' ? DULLSOPPER_CONSTANTS : null);
+
+  const LIST_URL = (consts && consts.COMMUNITY_LIST_URL)
+    ? consts.COMMUNITY_LIST_URL
     : 'https://raw.githubusercontent.com/StbanMc/CommunityBlocklists/main/exports/hosts/shopping.txt';
 
-  const STORAGE_KEY_TEXT = (typeof DULLSOPPER_CONSTANTS !== 'undefined')
-    ? DULLSOPPER_CONSTANTS.STORAGE_KEYS.COMMUNITY_TEXT
-    : 'dullsopper_community_text';
+  const STORAGE_KEY_TEXT = (consts && consts.STORAGE_KEYS)
+    ? consts.STORAGE_KEYS.COMMUNITY_TEXT
+    : 'dullshopper_community_text';
 
-  const STORAGE_KEY_META = (typeof DULLSOPPER_CONSTANTS !== 'undefined')
-    ? DULLSOPPER_CONSTANTS.STORAGE_KEYS.COMMUNITY_META
-    : 'dullsopper_community_meta';
+  const STORAGE_KEY_META = (consts && consts.STORAGE_KEYS)
+    ? consts.STORAGE_KEYS.COMMUNITY_META
+    : 'dullshopper_community_meta';
 
   let inMemoryDomainSet = null;
   let metadata = {
@@ -293,9 +297,12 @@ const DullSopperCommunityList = (() => {
   };
 })();
 
+const DullSopperCommunityList = DullShopperCommunityList;
+
 if (typeof globalThis !== 'undefined') {
-  globalThis.DullSopperCommunityList = DullSopperCommunityList;
+  globalThis.DullShopperCommunityList = DullShopperCommunityList;
+  globalThis.DullSopperCommunityList = DullShopperCommunityList;
 }
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = DullSopperCommunityList;
+  module.exports = DullShopperCommunityList;
 }

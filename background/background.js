@@ -6,6 +6,18 @@
 (() => {
   const browserApi = (typeof browser !== 'undefined') ? browser : chrome;
 
+  const consts = (typeof DULLSHOPPER_CONSTANTS !== 'undefined')
+    ? DULLSHOPPER_CONSTANTS
+    : (typeof DULLSOPPER_CONSTANTS !== 'undefined' ? DULLSOPPER_CONSTANTS : null);
+
+  const storage = (typeof DullShopperStorage !== 'undefined')
+    ? DullShopperStorage
+    : (typeof DullSopperStorage !== 'undefined' ? DullSopperStorage : null);
+
+  const communityList = (typeof DullShopperCommunityList !== 'undefined')
+    ? DullShopperCommunityList
+    : (typeof DullSopperCommunityList !== 'undefined' ? DullSopperCommunityList : null);
+
   /**
    * Update browser action badge and icon for a tab
    */

@@ -1,27 +1,30 @@
 /**
- * DullSopper - Content Styles
+ * DullShopper - Content Styles
  * Dulls web shops with high-performance CSS grayscale filtering.
  */
 
 :root {
-  --dullsopper-grayscale: 100%;
-  --dullsopper-contrast: 100%;
-  --dullsopper-brightness: 100%;
+  --dullshopper-grayscale: 100%;
+  --dullshopper-contrast: 100%;
+  --dullshopper-brightness: 100%;
 }
 
-/* Primary grayscale filter applied to html root */
-html.dullsopper-grayscale {
-  filter: grayscale(var(--dullsopper-grayscale, 100%))
-          contrast(var(--dullsopper-contrast, 100%))
-          brightness(var(--dullsopper-brightness, 100%)) !important;
-  -webkit-filter: grayscale(var(--dullsopper-grayscale, 100%))
-                  contrast(var(--dullsopper-contrast, 100%))
-                  brightness(var(--dullsopper-brightness, 100%)) !important;
-  transition: filter 0.2s ease-in-out !important;
+/* Primary grayscale filter applied to html root, body, and major SPA containers */
+html.dullshopper-grayscale,
+html[data-dullshopper="active"],
+body.dullshopper-grayscale,
+body[data-dullshopper="active"] {
+  filter: grayscale(var(--dullshopper-grayscale, 100%))
+          contrast(var(--dullshopper-contrast, 100%))
+          brightness(var(--dullshopper-brightness, 100%)) !important;
+  -webkit-filter: grayscale(var(--dullshopper-grayscale, 100%))
+                  contrast(var(--dullshopper-contrast, 100%))
+                  brightness(var(--dullshopper-brightness, 100%)) !important;
+  transition: filter 0.15s ease-in-out !important;
 }
 
 /* Optional In-Page Notification Banner */
-#dullsopper-notification-banner {
+#dullshopper-notification-banner {
   position: fixed !important;
   top: 12px !important;
   right: 16px !important;
@@ -40,27 +43,27 @@ html.dullsopper-grayscale {
   font-size: 13px !important;
   line-height: 1.4 !important;
   pointer-events: auto !important;
-  animation: dullsopper-slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  animation: dullshopper-slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-#dullsopper-notification-banner.dullsopper-fade-out {
+#dullshopper-notification-banner.dullshopper-fade-out {
   opacity: 0 !important;
   transform: translateY(-8px) !important;
   transition: opacity 0.3s ease, transform 0.3s ease !important;
 }
 
-.dullsopper-banner-icon {
+.dullshopper-banner-icon {
   font-size: 15px !important;
   display: flex !important;
   align-items: center !important;
 }
 
-.dullsopper-banner-text {
+.dullshopper-banner-text {
   font-weight: 500 !important;
   color: #e5e5ea !important;
 }
 
-.dullsopper-banner-btn {
+.dullshopper-banner-btn {
   background: rgba(255, 255, 255, 0.15) !important;
   border: none !important;
   color: #ffffff !important;
@@ -72,11 +75,11 @@ html.dullsopper-grayscale {
   transition: background 0.15s ease !important;
 }
 
-.dullsopper-banner-btn:hover {
+.dullshopper-banner-btn:hover {
   background: rgba(255, 255, 255, 0.25) !important;
 }
 
-.dullsopper-banner-close {
+.dullshopper-banner-close {
   background: transparent !important;
   border: none !important;
   color: #8e8e93 !important;
@@ -88,11 +91,11 @@ html.dullsopper-grayscale {
   align-items: center !important;
 }
 
-.dullsopper-banner-close:hover {
+.dullshopper-banner-close:hover {
   color: #ffffff !important;
 }
 
-@keyframes dullsopper-slide-in {
+@keyframes dullshopper-slide-in {
   from {
     opacity: 0;
     transform: translateY(-10px);

@@ -1,8 +1,8 @@
 /**
- * DullSopper - Shared Constants
+ * DullShopper - Shared Constants
  */
 
-const DULLSOPPER_CONSTANTS = {
+const DULLSHOPPER_CONSTANTS = {
   DEFAULT_SETTINGS: {
     enabled: true,                // Global master switch
     autoDetect: true,             // Automatically detect web shops
@@ -26,18 +26,27 @@ const DULLSOPPER_CONSTANTS = {
   },
 
   MESSAGES: {
-    GET_PAGE_STATUS: 'DULLSOPPER_GET_PAGE_STATUS',
-    SHOP_DETECTED: 'DULLSOPPER_SHOP_DETECTED',
-    SET_DOMAIN_STATUS: 'DULLSOPPER_SET_DOMAIN_STATUS',
-    UPDATE_SETTINGS: 'DULLSOPPER_UPDATE_SETTINGS',
-    GET_POPUP_DATA: 'DULLSOPPER_GET_POPUP_DATA',
-    GET_OPTIONS_DATA: 'DULLSOPPER_GET_OPTIONS_DATA',
-    APPLY_STYLES: 'DULLSOPPER_APPLY_STYLES',
-    UPDATE_COMMUNITY_LIST: 'DULLSOPPER_UPDATE_COMMUNITY_LIST',
-    GET_COMMUNITY_STATUS: 'DULLSOPPER_GET_COMMUNITY_STATUS'
+    GET_PAGE_STATUS: 'DULLSHOPPER_GET_PAGE_STATUS',
+    SHOP_DETECTED: 'DULLSHOPPER_SHOP_DETECTED',
+    SET_DOMAIN_STATUS: 'DULLSHOPPER_SET_DOMAIN_STATUS',
+    UPDATE_SETTINGS: 'DULLSHOPPER_UPDATE_SETTINGS',
+    GET_POPUP_DATA: 'DULLSHOPPER_GET_POPUP_DATA',
+    GET_OPTIONS_DATA: 'DULLSHOPPER_GET_OPTIONS_DATA',
+    APPLY_STYLES: 'DULLSHOPPER_APPLY_STYLES',
+    UPDATE_COMMUNITY_LIST: 'DULLSHOPPER_UPDATE_COMMUNITY_LIST',
+    GET_COMMUNITY_STATUS: 'DULLSHOPPER_GET_COMMUNITY_STATUS'
   },
 
   STORAGE_KEYS: {
+    SETTINGS: 'dullshopper_settings',
+    BLOCKLIST: 'dullshopper_blocklist',
+    WHITELIST: 'dullshopper_whitelist',
+    DETECTED_SHOPS: 'dullshopper_detected_shops',
+    COMMUNITY_TEXT: 'dullshopper_community_text',
+    COMMUNITY_META: 'dullshopper_community_meta'
+  },
+
+  LEGACY_STORAGE_KEYS: {
     SETTINGS: 'dullsopper_settings',
     BLOCKLIST: 'dullsopper_blocklist',
     WHITELIST: 'dullsopper_whitelist',
@@ -47,13 +56,16 @@ const DULLSOPPER_CONSTANTS = {
   },
 
   COMMUNITY_LIST_URL: 'https://raw.githubusercontent.com/StbanMc/CommunityBlocklists/main/exports/hosts/shopping.txt',
-  COMMUNITY_ALARM_NAME: 'dullsopper_community_update_alarm'
+  COMMUNITY_ALARM_NAME: 'dullshopper_community_update_alarm'
 };
 
-// Expose on global/window for both background and content scripts
+// Aliases for backward compatibility
+const DULLSOPPER_CONSTANTS = DULLSHOPPER_CONSTANTS;
+
 if (typeof globalThis !== 'undefined') {
-  globalThis.DULLSOPPER_CONSTANTS = DULLSOPPER_CONSTANTS;
+  globalThis.DULLSHOPPER_CONSTANTS = DULLSHOPPER_CONSTANTS;
+  globalThis.DULLSOPPER_CONSTANTS = DULLSHOPPER_CONSTANTS;
 }
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = DULLSOPPER_CONSTANTS;
+  module.exports = DULLSHOPPER_CONSTANTS;
 }

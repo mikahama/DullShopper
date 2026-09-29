@@ -5,6 +5,14 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const browserApi = (typeof browser !== 'undefined') ? browser : chrome;
 
+  const consts = (typeof DULLSHOPPER_CONSTANTS !== 'undefined')
+    ? DULLSHOPPER_CONSTANTS
+    : (typeof DULLSOPPER_CONSTANTS !== 'undefined' ? DULLSOPPER_CONSTANTS : null);
+
+  const storage = (typeof DullShopperStorage !== 'undefined')
+    ? DullShopperStorage
+    : (typeof DullSopperStorage !== 'undefined' ? DullSopperStorage : null);
+
   // Navigation
   const navItems = document.querySelectorAll('.nav-item');
   const tabPanes = document.querySelectorAll('.tab-pane');

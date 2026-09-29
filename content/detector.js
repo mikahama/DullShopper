@@ -1,10 +1,10 @@
 /**
- * DullSopper - Web Shop Detector Engine
+ * DullShopper - Web Shop Detector Engine
  * Multi-layer heuristic analyzer that evaluates structured data,
  * platform footprints, interactive shopping buttons, and DOM semantics.
  */
 
-const DullSopperDetector = (() => {
+const DullShopperDetector = (() => {
   const SHOP_THRESHOLD = 35;
 
   // Multilingual regex for "Add to Cart", "Buy Now", "Checkout"
@@ -330,9 +330,12 @@ const DullSopperDetector = (() => {
   };
 })();
 
+const DullSopperDetector = DullShopperDetector;
+
 if (typeof globalThis !== 'undefined') {
-  globalThis.DullSopperDetector = DullSopperDetector;
+  globalThis.DullShopperDetector = DullShopperDetector;
+  globalThis.DullSopperDetector = DullShopperDetector;
 }
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = DullSopperDetector;
+  module.exports = DullShopperDetector;
 }
