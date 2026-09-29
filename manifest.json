@@ -1,0 +1,65 @@
+{
+  "manifest_version": 3,
+  "name": "DullSopper - Web Shop Grayscale Filter",
+  "version": "1.0.0",
+  "description": "Detects web shops and turns pages into dull grayscale to curb impulse shopping.",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "dullsopper@mikahama.local",
+      "strict_min_version": "142.0",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    }
+  },
+  "permissions": [
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "scripts": [
+      "shared/constants.js",
+      "shared/popular-shops.js",
+      "shared/storage.js",
+      "background/background.js"
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "shared/constants.js",
+        "shared/popular-shops.js",
+        "shared/storage.js",
+        "content/detector.js",
+        "content/content.js"
+      ],
+      "css": ["content/dullsopper.css"],
+      "run_at": "document_start",
+      "all_frames": false
+    }
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "DullSopper",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
+  },
+  "options_ui": {
+    "page": "options/options.html",
+    "open_in_tab": true
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  }
+}

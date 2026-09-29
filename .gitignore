@@ -1,0 +1,9 @@
+# Dependencies
+node_modules/
+
+# web-ext build artifacts
+web-ext-artifacts/
+
+# OS and IDE files
+.DS_Store
+*.log

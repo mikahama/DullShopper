@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DullSopper</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header -->
+    <header class="header">
+      <div class="brand">
+        <img src="../icons/icon-32.png" alt="DullSopper Logo" class="brand-logo">
+        <div>
+          <h1 class="brand-title">DullSopper</h1>
+          <p class="brand-subtitle">Shop Impulse Reducer</p>
+        </div>
+      </div>
+      <div class="master-toggle-wrap" title="Toggle DullSopper globally">
+        <label class="switch">
+          <input type="checkbox" id="global-toggle" checked>
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </header>
+
+    <!-- Global Disabled Notice (hidden by default) -->
+    <div id="global-disabled-banner" class="notice-banner hidden">
+      <span>Extension is currently paused</span>
+    </div>
+
+    <!-- Current Site Card -->
+    <section class="card site-card">
+      <div class="card-header">
+        <span class="card-label">CURRENT WEBSITE</span>
+        <span id="site-status-badge" class="badge badge-normal">Checking...</span>
+      </div>
+
+      <div class="site-domain-row">
+        <span id="site-domain" class="site-domain">loading...</span>
+      </div>
+
+      <div id="detection-reasons-box" class="detection-box hidden">
+        <div class="detection-title">
+          <span>🔍 Shop Signals Detected</span>
+        </div>
+        <ul id="detection-reasons-list" class="reasons-list"></ul>
+      </div>
+
+      <!-- Action Buttons for Current Site -->
+      <div class="site-actions">
+        <button id="toggle-site-btn" class="btn btn-primary">
+          <span id="toggle-site-icon">🩶</span>
+          <span id="toggle-site-text">Dull this site</span>
+        </button>
+        <button id="reset-site-btn" class="btn btn-secondary hidden" title="Reset site to automatic detection">
+          Reset
+        </button>
+      </div>
+    </section>
+
+    <!-- Quick Add to Blocklist -->
+    <section class="card add-card">
+      <div class="card-label">ADD SITE TO DULL LIST</div>
+      <div class="input-group">
+        <input type="text" id="quick-domain-input" placeholder="e.g. shein.com" spellcheck="false" autocomplete="off">
+        <button id="quick-add-btn" class="btn btn-small">Add</button>
+      </div>
+      <div id="quick-add-feedback" class="feedback-msg hidden"></div>
+    </section>
+
+    <!-- Quick Grayscale Slider -->
+    <section class="card slider-card">
+      <div class="slider-header">
+        <span class="card-label">GRAYSCALE DULLNESS</span>
+        <span id="intensity-val" class="intensity-val">100%</span>
+      </div>
+      <input type="range" id="grayscale-slider" min="10" max="100" value="100" step="5">
+    </section>
+
+    <!-- Footer Stats & Settings Link -->
+    <footer class="footer">
+      <div class="stats-text" id="footer-stats">
+        <span>0 blocked</span> • <span>0 allowed</span>
+      </div>
+      <a href="#" id="open-settings-link" class="settings-link">
+        ⚙️ Settings & Lists
+      </a>
+    </footer>
+  </div>
+
+  <script src="../shared/constants.js"></script>
+  <script src="../shared/popular-shops.js"></script>
+  <script src="../shared/storage.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

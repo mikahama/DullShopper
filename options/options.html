@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DullSopper Settings</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <img src="../icons/icon-48.png" alt="DullSopper Icon" class="brand-icon">
+        <div class="brand-text">
+          <h2>DullSopper</h2>
+          <span class="version">v1.0.0</span>
+        </div>
+      </div>
+
+      <nav class="nav-links">
+        <button class="nav-item active" data-tab="tab-lists">
+          <span class="nav-icon">📋</span>
+          <span>Domain Lists</span>
+        </button>
+        <button class="nav-item" data-tab="tab-detected">
+          <span class="nav-icon">🔍</span>
+          <span>Detected Shops</span>
+          <span id="detected-counter" class="nav-counter">0</span>
+        </button>
+        <button class="nav-item" data-tab="tab-settings">
+          <span class="nav-icon">⚙️</span>
+          <span>Detection & Filter</span>
+        </button>
+        <button class="nav-item" data-tab="tab-backup">
+          <span class="nav-icon">💾</span>
+          <span>Import & Export</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <p>Taming shopping impulses with grayscale.</p>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Tab 1: Domain Lists -->
+      <section id="tab-lists" class="tab-pane active">
+        <header class="tab-header">
+          <h1>Domain Lists Management</h1>
+          <p>Control which websites are always turned grayscale or always allowed in full color.</p>
+        </header>
+
+        <div class="grid-two-cols">
+          <!-- Dull List (Blocklist) -->
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <h2>Custom Dull List (Blocklist)</h2>
+                <p class="panel-desc">These sites are always turned into grayscale color.</p>
+              </div>
+              <span id="blocklist-count" class="badge">0 sites</span>
+            </div>
+
+            <div class="input-row">
+              <input type="text" id="add-blocklist-input" placeholder="e.g. asos.com or clothing-shop.com" spellcheck="false">
+              <button id="add-blocklist-btn" class="btn btn-primary">Add Site</button>
+            </div>
+            <div id="blocklist-msg" class="feedback-text hidden"></div>
+
+            <div class="search-row">
+              <input type="text" id="filter-blocklist" placeholder="Filter list..." class="filter-input">
+            </div>
+
+            <ul id="blocklist-items" class="domain-list">
+              <!-- Dynamically populated -->
+            </ul>
+          </div>
+
+          <!-- Whitelist (Allowed List) -->
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <h2>Allowed List (Whitelist)</h2>
+                <p class="panel-desc">These sites will NEVER be grayscale, even if shop is detected.</p>
+              </div>
+              <span id="whitelist-count" class="badge">0 sites</span>
+            </div>
+
+            <div class="input-row">
+              <input type="text" id="add-whitelist-input" placeholder="e.g. grocery-store.com" spellcheck="false">
+              <button id="add-whitelist-btn" class="btn btn-secondary">Allow Site</button>
+            </div>
+            <div id="whitelist-msg" class="feedback-text hidden"></div>
+
+            <div class="search-row">
+              <input type="text" id="filter-whitelist" placeholder="Filter list..." class="filter-input">
+            </div>
+
+            <ul id="whitelist-items" class="domain-list">
+              <!-- Dynamically populated -->
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 2: Detected Shops History -->
+      <section id="tab-detected" class="tab-pane">
+        <header class="tab-header">
+          <div class="header-with-action">
+            <div>
+              <h1>Automatically Detected Web Shops</h1>
+              <p>Web shops discovered by DullSopper's intelligent heuristic engine while you browse.</p>
+            </div>
+            <button id="clear-detected-btn" class="btn btn-danger btn-small">Clear History</button>
+          </div>
+        </header>
+
+        <div class="panel">
+          <div class="search-row">
+            <input type="text" id="filter-detected" placeholder="Search detected shops..." class="filter-input">
+          </div>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Domain</th>
+                  <th>Detected Signals</th>
+                  <th>Date</th>
+                  <th style="text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="detected-shops-tbody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 3: Detection & Visual Settings -->
+      <section id="tab-settings" class="tab-pane">
+        <header class="tab-header">
+          <h1>Detection & Visual Filter Settings</h1>
+          <p>Customize detection heuristics and grayscale filter appearance.</p>
+        </header>
+
+        <div class="settings-sections">
+          <!-- Detection Behavior -->
+          <div class="panel">
+            <h2>Automatic Detection</h2>
+            <div class="setting-item">
+              <div class="setting-info">
+                <strong>Automatic Web Shop Detection</strong>
+                <p>Scans pages for e-commerce structured data (JSON-LD), Add-to-Cart buttons, and store signatures.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="setting-autodetect" checked>
+                <span class="slider round"></span>
+              </label>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <strong>Include Curated Retailers List</strong>
+                <p>Preloads major global shopping domains (Amazon, eBay, AliExpress, Walmart, Target, etc.) for zero-delay protection.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="setting-preloaded" checked>
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Visual Filter Settings -->
+          <div class="panel">
+            <h2>Visual Filter & Dullness</h2>
+            <div class="setting-item vertical">
+              <div class="setting-info-row">
+                <strong>Grayscale Dullness Level</strong>
+                <span id="setting-intensity-display" class="slider-val">100%</span>
+              </div>
+              <input type="range" id="setting-intensity" min="10" max="100" value="100" step="5" class="full-slider">
+              <p class="setting-hint">100% is completely black and white. Lower values retain subtle color hues.</p>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <strong>Extra Drab (Reduce Contrast by 10%)</strong>
+                <p>Makes bright e-commerce hero banners and glossy product photos look flatter and even less enticing.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="setting-contrast">
+                <span class="slider round"></span>
+              </label>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <strong>Dim Brightness by 10%</strong>
+                <p>Reduces eye fatigue and subdues flash sale highlights.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="setting-dim">
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Interface Settings -->
+          <div class="panel">
+            <h2>Notifications & Toolbar</h2>
+            <div class="setting-item">
+              <div class="setting-info">
+                <strong>Show Icon Badge</strong>
+                <p>Displays a "DULL" badge on the toolbar icon whenever viewing a dulled web shop.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="setting-badge" checked>
+                <span class="slider round"></span>
+              </label>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <strong>In-Page Notification Pill</strong>
+                <p>Shows a small floating pill at the top of dulled pages with a 1-click allow button.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="setting-banner">
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 4: Backup & Restore -->
+      <section id="tab-backup" class="tab-pane">
+        <header class="tab-header">
+          <h1>Import & Export Configuration</h1>
+          <p>Sync your Dull List and Whitelist across browsers or create backups.</p>
+        </header>
+
+        <div class="panel">
+          <h2>Export Configuration</h2>
+          <p class="panel-desc">Download a JSON file containing all your custom rules, whitelists, and preferences.</p>
+          <button id="export-json-btn" class="btn btn-primary">Download Backup (JSON)</button>
+        </div>
+
+        <div class="panel" style="margin-top: 16px;">
+          <h2>Import Configuration</h2>
+          <p class="panel-desc">Restore or merge domain lists and settings from a previously saved JSON file.</p>
+          <input type="file" id="import-file-input" accept=".json" style="display: none;">
+          <button id="import-json-btn" class="btn btn-secondary">Select JSON File to Import</button>
+          <div id="import-feedback" class="feedback-text hidden"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="../shared/constants.js"></script>
+  <script src="../shared/popular-shops.js"></script>
+  <script src="../shared/storage.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

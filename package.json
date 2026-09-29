@@ -1,0 +1,21 @@
+{
+  "name": "dullsopper",
+  "version": "1.0.0",
+  "description": "Firefox extension that detects web shops and turns them grayscale to curb impulse spending.",
+  "scripts": {
+    "test": "node --test test/*.js",
+    "lint": "npx web-ext lint",
+    "start": "npx web-ext run --firefox=/usr/bin/firefox",
+    "build": "npx web-ext build --overwrite-dest"
+  },
+  "keywords": [
+    "firefox",
+    "firefox-extension",
+    "webextension",
+    "grayscale",
+    "anti-consumerism",
+    "ecommerce-detector"
+  ],
+  "author": "mikahama",
+  "license": "MIT"
+}

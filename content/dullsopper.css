@@ -1,0 +1,104 @@
+/**
+ * DullSopper - Content Styles
+ * Dulls web shops with high-performance CSS grayscale filtering.
+ */
+
+:root {
+  --dullsopper-grayscale: 100%;
+  --dullsopper-contrast: 100%;
+  --dullsopper-brightness: 100%;
+}
+
+/* Primary grayscale filter applied to html root */
+html.dullsopper-grayscale {
+  filter: grayscale(var(--dullsopper-grayscale, 100%))
+          contrast(var(--dullsopper-contrast, 100%))
+          brightness(var(--dullsopper-brightness, 100%)) !important;
+  -webkit-filter: grayscale(var(--dullsopper-grayscale, 100%))
+                  contrast(var(--dullsopper-contrast, 100%))
+                  brightness(var(--dullsopper-brightness, 100%)) !important;
+  transition: filter 0.2s ease-in-out !important;
+}
+
+/* Optional In-Page Notification Banner */
+#dullsopper-notification-banner {
+  position: fixed !important;
+  top: 12px !important;
+  right: 16px !important;
+  z-index: 2147483647 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  background: rgba(28, 28, 30, 0.94) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  color: #f2f2f7 !important;
+  padding: 8px 14px !important;
+  border-radius: 9999px !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+  pointer-events: auto !important;
+  animation: dullsopper-slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+#dullsopper-notification-banner.dullsopper-fade-out {
+  opacity: 0 !important;
+  transform: translateY(-8px) !important;
+  transition: opacity 0.3s ease, transform 0.3s ease !important;
+}
+
+.dullsopper-banner-icon {
+  font-size: 15px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.dullsopper-banner-text {
+  font-weight: 500 !important;
+  color: #e5e5ea !important;
+}
+
+.dullsopper-banner-btn {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: none !important;
+  color: #ffffff !important;
+  padding: 3px 9px !important;
+  border-radius: 12px !important;
+  cursor: pointer !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  transition: background 0.15s ease !important;
+}
+
+.dullsopper-banner-btn:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
+}
+
+.dullsopper-banner-close {
+  background: transparent !important;
+  border: none !important;
+  color: #8e8e93 !important;
+  cursor: pointer !important;
+  font-size: 15px !important;
+  padding: 0 2px !important;
+  line-height: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.dullsopper-banner-close:hover {
+  color: #ffffff !important;
+}
+
+@keyframes dullsopper-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
