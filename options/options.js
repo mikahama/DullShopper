@@ -40,6 +40,21 @@ document.addEventListener('DOMContentLoaded', async () => {
   const settingBadge = document.getElementById('setting-badge');
   const settingBanner = document.getElementById('setting-banner');
 
+  // Community Blocklist elements
+  const communityCounter = document.getElementById('community-counter');
+  const updateCommunityBtn = document.getElementById('update-community-btn');
+  const updateCommunityIcon = document.getElementById('update-community-icon');
+  const updateCommunityText = document.getElementById('update-community-text');
+  const communityStatusBadge = document.getElementById('community-status-badge');
+  const communityDomainsCount = document.getElementById('community-domains-count');
+  const communityLastUpdated = document.getElementById('community-last-updated');
+  const communityUpdateMsg = document.getElementById('community-update-msg');
+  const settingCommunityEnabled = document.getElementById('setting-community-enabled');
+  const settingCommunityAutoupdate = document.getElementById('setting-community-autoupdate');
+  const testCommunityInput = document.getElementById('test-community-input');
+  const testCommunityBtn = document.getElementById('test-community-btn');
+  const testCommunityResult = document.getElementById('test-community-result');
+
   // Backup & Restore
   const exportBtn = document.getElementById('export-json-btn');
   const importBtn = document.getElementById('import-json-btn');
@@ -80,6 +95,47 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderWhitelist();
     renderDetectedShops();
     renderSettings();
+    await renderCommunityStatus();
+  }
+
+  /**
+   * Render Community Blocklist stats and status
+   */
+  async function renderCommunityStatus() {
+    const resp = await sendBackgroundMessage({
+      action: DULLSOPPER_CONSTANTS.MESSAGES.GET_COMMUNITY_STATUS
+    });
+
+    const meta = (resp && resp.metadata) ? resp.metadata : {};
+    const count = meta.domainCount || 0;
+    const formattedCount = count > 0 ? count.toLocaleString() : '188,800+';
+
+    if (communityCounter) {
+      communityCounter.textContent = count > 0 ? `${Math.round(count / 1000)}k` : '188k';
+    }
+    if (communityDomainsCount) {
+      communityDomainsCount.textContent = `${formattedCount} domains`;
+    }
+
+    if (communityLastUpdated) {
+      if (meta.lastUpdated) {
+        communityLastUpdated.textContent = new Date(meta.lastUpdated).toLocaleString();
+      } else {
+        communityLastUpdated.textContent = 'Bundled database';
+      }
+    }
+
+    if (communityStatusBadge) {
+      if (meta.lastStatus === 'error') {
+        communityStatusBadge.className = 'badge';
+        communityStatusBadge.style.color = 'var(--danger-color)';
+        communityStatusBadge.textContent = 'Sync issue (Using cache)';
+      } else {
+        communityStatusBadge.className = 'badge';
+        communityStatusBadge.style.color = 'var(--success-color)';
+        communityStatusBadge.textContent = 'Active & Synchronized';
+      }
+    }
   }
 
   // --- Tab Navigation ---
@@ -310,6 +366,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     settingDim.checked = !!currentSettings.dimImages;
     settingBadge.checked = !!currentSettings.showBadge;
     settingBanner.checked = !!currentSettings.showBanner;
+    if (settingCommunityEnabled) settingCommunityEnabled.checked = currentSettings.useCommunityBlocklist !== false;
+    if (settingCommunityAutoupdate) settingCommunityAutoupdate.checked = currentSettings.autoUpdateCommunityList !== false;
   }
 
   // --- Add to Blocklist Event ---
@@ -411,6 +469,74 @@ document.addEventListener('DOMContentLoaded', async () => {
     const val = parseInt(settingIntensity.value, 10);
     saveSettingChange('grayscaleIntensity', val);
   });
+
+  // Community List settings listeners
+  if (settingCommunityEnabled) {
+    settingCommunityEnabled.addEventListener('change', () => {
+      saveSettingChange('useCommunityBlocklist', settingCommunityEnabled.checked);
+    });
+  }
+
+  if (settingCommunityAutoupdate) {
+    settingCommunityAutoupdate.addEventListener('change', () => {
+      saveSettingChange('autoUpdateCommunityList', settingCommunityAutoupdate.checked);
+    });
+  }
+
+  // Update Community List Now Button
+  if (updateCommunityBtn) {
+    updateCommunityBtn.addEventListener('click', async () => {
+      updateCommunityBtn.disabled = true;
+      if (updateCommunityText) updateCommunityText.textContent = 'Updating...';
+      if (updateCommunityIcon) updateCommunityIcon.textContent = '⏳';
+
+      const res = await sendBackgroundMessage({
+        action: DULLSOPPER_CONSTANTS.MESSAGES.UPDATE_COMMUNITY_LIST
+      });
+
+      updateCommunityBtn.disabled = false;
+      if (updateCommunityIcon) updateCommunityIcon.textContent = '🔄';
+      if (updateCommunityText) updateCommunityText.textContent = 'Update List Now';
+
+      if (res && res.success) {
+        showMsg(communityUpdateMsg, `Successfully updated! ${res.metadata ? res.metadata.domainCount.toLocaleString() : ''} domains loaded.`, false);
+      } else {
+        showMsg(communityUpdateMsg, `Update error: ${res.error || 'Network error'} (Existing list preserved)`, true);
+      }
+
+      await renderCommunityStatus();
+    });
+  }
+
+  // Test domain in community list
+  if (testCommunityBtn) {
+    testCommunityBtn.addEventListener('click', handleTestCommunity);
+    if (testCommunityInput) {
+      testCommunityInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') handleTestCommunity();
+      });
+    }
+  }
+
+  async function handleTestCommunity() {
+    const raw = testCommunityInput ? testCommunityInput.value.trim() : '';
+    const domain = DullSopperStorage.cleanDomain(raw);
+    if (!domain) {
+      showMsg(testCommunityResult, 'Please enter a valid domain to check', true);
+      return;
+    }
+
+    const data = await sendBackgroundMessage({
+      action: DULLSOPPER_CONSTANTS.MESSAGES.GET_POPUP_DATA,
+      url: domain
+    });
+
+    if (data && data.isCommunity) {
+      showMsg(testCommunityResult, `✓ "${domain}" is on the Community Shopping Blocklist!`, false);
+    } else {
+      showMsg(testCommunityResult, `✗ "${domain}" is NOT in the Community Shopping Blocklist.`, true);
+    }
+  }
 
   // --- Export Backup ---
   exportBtn.addEventListener('click', async () => {

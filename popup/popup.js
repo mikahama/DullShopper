@@ -141,6 +141,16 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
 
+    if (evaluation.status === DULLSOPPER_CONSTANTS.STATUS.DULLED_COMMUNITY) {
+      siteStatusBadge.className = 'badge badge-gray';
+      siteStatusBadge.textContent = '🛍️ Dull (Community List)';
+      detectionBox.classList.remove('hidden');
+      const li = document.createElement('li');
+      li.textContent = 'Listed in Community Shopping Blocklist';
+      detectionReasonsList.appendChild(li);
+      return;
+    }
+
     if (evaluation.status === DULLSOPPER_CONSTANTS.STATUS.DULLED_DETECTED || isDetected) {
       siteStatusBadge.className = 'badge badge-gray';
       siteStatusBadge.textContent = '😴 Dull (Shop Detected)';

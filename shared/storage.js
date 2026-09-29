@@ -299,7 +299,22 @@ const DullSopperStorage = (() => {
       };
     }
 
-    // 5. Check if currently detected OR previously recorded as detected shop
+    // 5. Check Community Shopping Blocklist (StbanMc/CommunityBlocklists)
+    const communityChecker = (context && context.communityChecker)
+      ? context.communityChecker
+      : (typeof DullSopperCommunityList !== 'undefined' ? DullSopperCommunityList.isCommunityShop : null);
+
+    if (settings.useCommunityBlocklist !== false && communityChecker && communityChecker(domain)) {
+      return {
+        isDulled: true,
+        status: STATUS.DULLED_COMMUNITY,
+        domain,
+        reason: 'Community Shopping Blocklist',
+        settings
+      };
+    }
+
+    // 6. Check if currently detected OR previously recorded as detected shop
     const previousDetection = detectedShops[domain];
     if (settings.autoDetect && (isDetectedShop || previousDetection)) {
       const reasons = isDetectedShop

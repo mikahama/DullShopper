@@ -23,6 +23,11 @@
           <span class="nav-icon">📋</span>
           <span>Domain Lists</span>
         </button>
+        <button class="nav-item" data-tab="tab-community">
+          <span class="nav-icon">🌐</span>
+          <span>Community List</span>
+          <span id="community-counter" class="nav-counter">...</span>
+        </button>
         <button class="nav-item" data-tab="tab-detected">
           <span class="nav-icon">🔍</span>
           <span>Detected Shops</span>
@@ -102,6 +107,82 @@
               <!-- Dynamically populated -->
             </ul>
           </div>
+        </div>
+      </section>
+
+      <!-- Tab: Community Shopping Blocklist -->
+      <section id="tab-community" class="tab-pane">
+        <header class="tab-header">
+          <div class="header-with-action">
+            <div>
+              <h1>Community Shopping Blocklist</h1>
+              <p>Massive database of ~188,000 online stores and shopping platforms, kept automatically up to date.</p>
+            </div>
+            <button id="update-community-btn" class="btn btn-primary">
+              <span id="update-community-icon">🔄</span>
+              <span id="update-community-text">Update List Now</span>
+            </button>
+          </div>
+        </header>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>List Status & Synchronization</h2>
+              <p class="panel-desc">Source: <a href="https://raw.githubusercontent.com/StbanMc/CommunityBlocklists/main/exports/hosts/shopping.txt" target="_blank" rel="noopener" style="color: var(--accent-primary);">StbanMc/CommunityBlocklists (shopping.txt)</a></p>
+            </div>
+            <span id="community-status-badge" class="badge">Checking...</span>
+          </div>
+
+          <div class="stats-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px;">
+            <div style="background: var(--bg-main); padding: 14px; border-radius: 8px; border: 1px solid var(--card-border);">
+              <div style="color: var(--text-muted); font-size: 11px; font-weight: 600; text-transform: uppercase;">Blocked Domains</div>
+              <div id="community-domains-count" style="font-size: 20px; font-weight: 700; color: var(--text-main); margin-top: 4px;">Loading...</div>
+            </div>
+            <div style="background: var(--bg-main); padding: 14px; border-radius: 8px; border: 1px solid var(--card-border);">
+              <div style="color: var(--text-muted); font-size: 11px; font-weight: 600; text-transform: uppercase;">Last Updated</div>
+              <div id="community-last-updated" style="font-size: 13px; font-weight: 600; color: var(--text-main); margin-top: 6px;">Loading...</div>
+            </div>
+            <div style="background: var(--bg-main); padding: 14px; border-radius: 8px; border: 1px solid var(--card-border);">
+              <div style="color: var(--text-muted); font-size: 11px; font-weight: 600; text-transform: uppercase;">Update Schedule</div>
+              <div style="font-size: 13px; font-weight: 600; color: var(--success-color); margin-top: 6px;">Every 24 Hours</div>
+            </div>
+          </div>
+
+          <div id="community-update-msg" class="feedback-text hidden"></div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <strong>Enable Community Shopping Blocklist</strong>
+              <p>Turn all 188,000+ stores on this list into grayscale color.</p>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="setting-community-enabled" checked>
+              <span class="slider round"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <strong>Automatic Background Updates</strong>
+              <p>Periodically checks and updates shopping.txt every 24 hours in the background.</p>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="setting-community-autoupdate" checked>
+              <span class="slider round"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Quick Domain Test in Community List -->
+        <div class="panel">
+          <h2>Test Domain Lookup</h2>
+          <p class="panel-desc">Check if a specific domain is included in the Community Shopping Blocklist.</p>
+          <div class="input-row">
+            <input type="text" id="test-community-input" placeholder="e.g. asos.com or 001shop.cz" spellcheck="false">
+            <button id="test-community-btn" class="btn btn-secondary">Check Domain</button>
+          </div>
+          <div id="test-community-result" class="feedback-text hidden"></div>
         </div>
       </section>
 

@@ -15,6 +15,12 @@ Research in consumer psychology shows that vibrant colors and polished product p
   - **Platform Signatures**: Identifies Shopify, WooCommerce, Magento, BigCommerce, PrestaShop, Squarespace Commerce, etc.
   - **Interactive Buy Triggers**: Detects multilingual "Add to Cart", "Buy Now", and "Proceed to Checkout" actions (English, German, French, Spanish, Finnish, Swedish, Dutch, etc.).
   - **Preloaded Major Retailers**: Instant zero-delay grayscale for global platforms (Amazon, eBay, AliExpress, Walmart, Target, Etsy, Shein, Temu, ASOS, Zara, etc.).
+- 🌐 **Community Shopping Blocklist Integration**:
+  - Automatically loads and integrates [StbanMc/CommunityBlocklists (shopping.txt)](https://raw.githubusercontent.com/StbanMc/CommunityBlocklists/main/exports/hosts/shopping.txt).
+  - Covers **188,000+** web stores and e-commerce platforms out of the box.
+  - **Automatic Background Updates**: Periodically syncs every 24 hours via `browser.alarms` to ensure newly registered shops are covered.
+  - Includes a preloaded local snapshot so protection works immediately offline.
+  - Manual "Update List Now" button and interactive domain lookup tester in Options.
 - 🩶 **Clean, Fast Grayscale Filtering**:
   - Injected via high-performance CSS filter variables with zero layout disruption.
   - Zero-flash startup: known shops and blocked domains are dulled immediately before DOM rendering completes.

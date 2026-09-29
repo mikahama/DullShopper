@@ -124,7 +124,46 @@
     console.log('DullSopper extension installed successfully.');
     const settings = await DullSopperStorage.getSettings();
     await DullSopperStorage.saveSettings(settings);
+
+    // Initialize community blocklist & schedule 24-hour auto-update alarm
+    if (typeof DullSopperCommunityList !== 'undefined') {
+      await DullSopperCommunityList.init();
+      try {
+        await browserApi.alarms.create(DULLSOPPER_CONSTANTS.COMMUNITY_ALARM_NAME, {
+          periodInMinutes: 1440 // 24 hours
+        });
+      } catch (e) {
+        console.debug('DullSopper: alarms.create error', e);
+      }
+    }
   });
+
+  browserApi.runtime.onStartup.addListener(async () => {
+    if (typeof DullSopperCommunityList !== 'undefined') {
+      await DullSopperCommunityList.init();
+    }
+  });
+
+  // Handle Periodic Alarms (Automatic Updates)
+  if (browserApi.alarms && browserApi.alarms.onAlarm) {
+    browserApi.alarms.onAlarm.addListener(async (alarm) => {
+      if (alarm.name === DULLSOPPER_CONSTANTS.COMMUNITY_ALARM_NAME) {
+        const settings = await DullSopperStorage.getSettings();
+        if (settings.autoUpdateCommunityList !== false && typeof DullSopperCommunityList !== 'undefined') {
+          console.log('DullSopper: Triggering scheduled 24h community list update');
+          const result = await DullSopperCommunityList.fetchAndUpdate(false);
+          if (result && result.updated) {
+            await broadcastStateChange(null);
+          }
+        }
+      }
+    });
+  }
+
+  // Ensure community list is initialized on background start
+  if (typeof DullSopperCommunityList !== 'undefined') {
+    DullSopperCommunityList.init().catch(err => console.debug('DullSopper: init community list error', err));
+  }
 
   // Handle Runtime Messages
   browserApi.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -179,6 +218,39 @@
             break;
           }
 
+          case DULLSOPPER_CONSTANTS.MESSAGES.GET_PAGE_STATUS: {
+            const domain = DullSopperStorage.cleanDomain(message.url);
+            const evaluation = await DullSopperStorage.evaluateSite(domain);
+            sendResponse({
+              evaluation,
+              domain
+            });
+            break;
+          }
+
+          case DULLSOPPER_CONSTANTS.MESSAGES.UPDATE_COMMUNITY_LIST: {
+            if (typeof DullSopperCommunityList !== 'undefined') {
+              const res = await DullSopperCommunityList.fetchAndUpdate(true);
+              await broadcastStateChange(null);
+              sendResponse(res);
+            } else {
+              sendResponse({ success: false, error: 'Community list module unavailable' });
+            }
+            break;
+          }
+
+          case DULLSOPPER_CONSTANTS.MESSAGES.GET_COMMUNITY_STATUS: {
+            if (typeof DullSopperCommunityList !== 'undefined') {
+              sendResponse({
+                success: true,
+                metadata: DullSopperCommunityList.getMetadata()
+              });
+            } else {
+              sendResponse({ success: false, error: 'Community list module unavailable' });
+            }
+            break;
+          }
+
           case DULLSOPPER_CONSTANTS.MESSAGES.GET_POPUP_DATA: {
             const tabUrl = message.url;
             const domain = DullSopperStorage.cleanDomain(tabUrl);
@@ -186,6 +258,12 @@
             const blocklist = await DullSopperStorage.getBlocklist();
             const whitelist = await DullSopperStorage.getWhitelist();
             const detectedShops = await DullSopperStorage.getDetectedShops();
+            const isCommunity = (typeof DullSopperCommunityList !== 'undefined')
+              ? DullSopperCommunityList.isCommunityShop(domain)
+              : false;
+            const communityMeta = (typeof DullSopperCommunityList !== 'undefined')
+              ? DullSopperCommunityList.getMetadata()
+              : null;
 
             sendResponse({
               domain,
@@ -193,6 +271,8 @@
               isBlocked: DullSopperStorage.isDomainInList(domain, blocklist),
               isWhitelisted: DullSopperStorage.isDomainInList(domain, whitelist),
               isDetected: !!detectedShops[domain],
+              isCommunity,
+              communityMeta,
               detectedInfo: detectedShops[domain] || null,
               totalBlocked: blocklist.length,
               totalWhitelisted: whitelist.length,

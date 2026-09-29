@@ -131,11 +131,31 @@
    * Evaluate page status and apply grayscale
    */
   async function evaluateAndApply(isDomReady = false) {
-    // Determine site status based on lists and stored info
-    currentSiteState = await DullSopperStorage.evaluateSite(currentDomain);
+    // Request authoritative evaluation from background worker (includes Community Shopping Blocklist)
+    try {
+      const bgResp = await new Promise((resolve) => {
+        const api = (typeof browser !== 'undefined' && browser.runtime) ? browser.runtime : (typeof chrome !== 'undefined' ? chrome.runtime : null);
+        if (api && api.sendMessage) {
+          api.sendMessage({
+            action: DULLSOPPER_CONSTANTS.MESSAGES.GET_PAGE_STATUS,
+            url: currentUrl
+          }, (res) => resolve(res || null));
+        } else {
+          resolve(null);
+        }
+      });
+
+      if (bgResp && bgResp.evaluation) {
+        currentSiteState = bgResp.evaluation;
+      } else {
+        currentSiteState = await DullSopperStorage.evaluateSite(currentDomain);
+      }
+    } catch {
+      currentSiteState = await DullSopperStorage.evaluateSite(currentDomain);
+    }
 
     // Apply immediate grayscale if it's already determined to be dulled
-    if (currentSiteState.isDulled) {
+    if (currentSiteState && currentSiteState.isDulled) {
       applyGrayscale(true, currentSiteState.settings);
     } else {
       applyGrayscale(false);
